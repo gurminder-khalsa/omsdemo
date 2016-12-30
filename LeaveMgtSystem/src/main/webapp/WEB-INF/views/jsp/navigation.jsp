@@ -41,11 +41,14 @@
                         <a href="/leavemgt/lms/applyLeaveForm"><i class="fa fa-fw fa-bar-chart-o"></i> Apply Leave</a>
                     </li>
                     <li <c:if test="${leaveDetailsSelected}"> class="active" </c:if>>
-                        <a href="/leavemgt/lms/leaveDetails"><i class="fa fa-fw fa-table"></i> Leave Details</a>
+                        <a href="/leavemgt/lms/leaveDetails"><i class="fa fa-fw fa-table"></i> My Leave Details</a>
                     </li>
-                    <li>
-                        <a href="forms.html"><i class="fa fa-fw fa-edit"></i> Forms</a>
-                    </li>
+                    <sec:authorize access="hasRole('ROLE_MANAGER')">
+					    <li <c:if test="${leaveDetailsForReportingSelected}"> class="active" </c:if>>
+	                        <a href="/leavemgt/lms/manager/leaveDetails"><i class="fa fa-fw fa-edit"></i> Leave Details for Reporting</a>
+	                    </li>
+					</sec:authorize>
+                    
                     <li>
                         <a href="bootstrap-elements.html"><i class="fa fa-fw fa-desktop"></i> Bootstrap Elements</a>
                     </li>

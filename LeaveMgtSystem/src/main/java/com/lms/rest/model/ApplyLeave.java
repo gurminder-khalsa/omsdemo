@@ -5,12 +5,10 @@ package com.lms.rest.model;
 
 import java.util.Date;
 
-import javax.persistence.TemporalType;
-
-import org.springframework.data.jpa.repository.Temporal;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import com.lms.rest.model.api.IApplyLeave;
+import com.lms.rest.model.api.IUser;
 
 /**
  * @author gurminder.singh
@@ -29,6 +27,8 @@ public class ApplyLeave implements IApplyLeave{
 	private String leaveReason;
 	
 	private String status;
+	
+	private IUser appliedBy;
 
 	/**
 	 * @return the leaveType
@@ -100,4 +100,18 @@ public class ApplyLeave implements IApplyLeave{
 		this.status = status;
 	}
 
+	/**
+	 * @return the appliedBy
+	 */
+	public IUser getAppliedBy() {
+		return appliedBy;
+	}
+
+	/**
+	 * @param appliedBy the appliedBy to set
+	 */
+	public void setAppliedBy(IUser appliedBy) {
+		this.appliedBy = appliedBy;
+	}
+	
 }

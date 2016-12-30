@@ -18,5 +18,6 @@ public interface ILeaveManagementService {
 	public void submitLeaveDetails(IApplyLeave applyLeave);
 	public List<IApplyLeave> getLeaveDetailsForUser(String userName);
 	public List<IApplyLeave> getLeaveDetailsForLoggedInUser();
+	public List<IApplyLeave> getLeaveDetailsForReportingUsers();
 
 }

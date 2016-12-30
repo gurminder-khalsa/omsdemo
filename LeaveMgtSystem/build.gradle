@@ -39,6 +39,7 @@ dependencies {
 	compile "org.springframework.security:spring-security-core:4.2.0.RELEASE"
 	compile "org.springframework.security:spring-security-web:4.2.0.RELEASE"
 	compile "org.springframework.security:spring-security-config:4.2.0.RELEASE"
+	compile "org.springframework.security:spring-security-taglibs:4.2.0.RELEASE"
 	
 	
 	compile "javax.persistence:persistence-api:1.0.2"

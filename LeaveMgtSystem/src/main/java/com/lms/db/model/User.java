@@ -12,6 +12,7 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 /**
@@ -41,6 +42,12 @@ public class User {
 	
 	@OneToMany(mappedBy="user", cascade=CascadeType.ALL, fetch=FetchType.EAGER)
 	private Set<UserRole> userRole;
+	
+	@OneToMany(mappedBy="user", cascade=CascadeType.ALL, fetch=FetchType.EAGER)
+	private Set<ReportingUser> reportingUser;
+	
+	@OneToOne
+	private User manager;
  
 	/**
 	 * @return the id
@@ -124,6 +131,34 @@ public class User {
 	 */
 	public void setUserRole(Set<UserRole> userRole) {
 		this.userRole = userRole;
+	}
+
+	/**
+	 * @return the reportingUser
+	 */
+	public Set<ReportingUser> getReportingUser() {
+		return reportingUser;
+	}
+
+	/**
+	 * @param reportingUser the reportingUser to set
+	 */
+	public void setReportingUser(Set<ReportingUser> reportingUser) {
+		this.reportingUser = reportingUser;
+	}
+
+	/**
+	 * @return the manager
+	 */
+	public User getManager() {
+		return manager;
+	}
+
+	/**
+	 * @param manager the manager to set
+	 */
+	public void setManager(User manager) {
+		this.manager = manager;
 	}
 	
 }

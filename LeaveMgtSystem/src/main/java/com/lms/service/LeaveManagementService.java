@@ -9,7 +9,6 @@ import java.util.stream.Collectors;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -22,6 +21,7 @@ import com.lms.repository.UserRepository;
 import com.lms.rest.model.LeaveType;
 import com.lms.rest.model.api.IApplyLeave;
 import com.lms.rest.model.api.ILeaveType;
+import com.lms.rest.model.api.IUser;
 import com.lms.service.api.ILeaveManagementService;
 import com.lms.utils.LeaveStatus;
 
@@ -89,8 +89,11 @@ public class LeaveManagementService implements ILeaveManagementService {
 		List<IApplyLeave> leaveDetailsBO = new ArrayList<IApplyLeave>();
 		for (com.lms.db.model.ApplyLeave applyLeaveEntity : leaveDetails) {
 			IApplyLeave applyLeave = new com.lms.rest.model.ApplyLeave();
-			entityConverter.convertToDto(applyLeave, applyLeaveEntity);
+			entityConverter.convertToDto(applyLeave,applyLeaveEntity);
 			applyLeave.setAppliedLeaveType(applyLeaveEntity.getLeaveType().getLeaveType());
+			IUser appliedBy = new com.lms.rest.model.User();
+			entityConverter.convertToDto(appliedBy,applyLeaveEntity.getUser());
+			applyLeave.setAppliedBy(appliedBy);
 			leaveDetailsBO.add(applyLeave);
 		}
 		return leaveDetailsBO;
@@ -100,6 +103,17 @@ public class LeaveManagementService implements ILeaveManagementService {
 	public List<IApplyLeave> getLeaveDetailsForLoggedInUser() {
 		org.springframework.security.core.userdetails.User loggedInUser = (org.springframework.security.core.userdetails.User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		return getLeaveDetailsForUser(loggedInUser.getUsername());
+	}
+
+	@Override
+	public List<IApplyLeave> getLeaveDetailsForReportingUsers() {
+		org.springframework.security.core.userdetails.User loggedInUser = (org.springframework.security.core.userdetails.User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		List<User> reportingUsers = userRepository.findUsersByManager(loggedInUser.getUsername());
+		List<IApplyLeave> leaveDetails = new ArrayList<IApplyLeave>();
+		for (User user : reportingUsers) {
+			leaveDetails.addAll(getLeaveDetailsForUser(user.getUserName()));
+		}
+		return leaveDetails;
 	}
 
 }

@@ -58,6 +58,16 @@ public class LeaveMgtController {
 
 	}
 	
+	@RequestMapping(value = "/manager/leaveDetails",method = RequestMethod.GET)
+	public ModelAndView getReportingLeaveDetails() {
+		ModelAndView model = new ModelAndView();
+		List<IApplyLeave> leaveDetails = leaveManagementService.getLeaveDetailsForReportingUsers();
+		model.addObject("leaveDetails", leaveDetails);
+		model.setViewName("leaveDetailsForReporting");
+		return model;
+
+	}
+	
 	
 	
 	

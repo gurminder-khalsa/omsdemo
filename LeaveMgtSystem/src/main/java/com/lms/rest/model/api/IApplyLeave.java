@@ -31,4 +31,8 @@ public interface IApplyLeave {
 	
 	public void setStatus(String status);
 	
+	public IUser getAppliedBy();
+	
+	public void setAppliedBy(IUser appliedBy);
+	
 }

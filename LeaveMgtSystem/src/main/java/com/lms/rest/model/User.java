@@ -3,6 +3,8 @@
  */
 package com.lms.rest.model;
 
+import java.util.List;
+
 import com.lms.rest.model.api.IUser;
 
 /**
@@ -20,6 +22,10 @@ public class User implements IUser {
 	private String firstName;	
 	
 	private String lastName;
+	
+	private String managerUser;
+	
+	private List<String> reportingUsers;
 
 	/**
 	 * @return the id
@@ -90,7 +96,33 @@ public class User implements IUser {
 	public void setLastName(String lastName) {
 		this.lastName = lastName;
 	}
-	
-	
+
+	/**
+	 * @return the managerUser
+	 */
+	public String getManagerUser() {
+		return managerUser;
+	}
+
+	/**
+	 * @param managerUser the managerUser to set
+	 */
+	public void setManagerUser(String managerUser) {
+		this.managerUser = managerUser;
+	}
+
+	/**
+	 * @return the reportingUsers
+	 */
+	public List<String> getReportingUsers() {
+		return reportingUsers;
+	}
+
+	/**
+	 * @param reportingUsers the reportingUsers to set
+	 */
+	public void setReportingUsers(List<String> reportingUsers) {
+		this.reportingUsers = reportingUsers;
+	}
 
 }
