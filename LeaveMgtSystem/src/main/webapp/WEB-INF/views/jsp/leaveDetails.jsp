@@ -5,7 +5,7 @@
         <div id="page-wrapper">
 
             <div class="container-fluid">
-			<form:form modelAttribute="applyLeave" action="submitLeaveForm" method="POST">
+			<form:form action="editLeaveForm" method="GET">
                 <!-- Page Heading -->
                 <div class="row">
                     <div class="col-lg-12">
@@ -58,7 +58,7 @@
 												<div class="div-table-col"><div class="col-xs-6">${leaveDetail.appliedLeaveType}</div></div>
 												<div class="div-table-col"><div class="col-xs-8"><fmt:formatDate pattern="MM-dd-yyyy" value="${leaveDetail.startDate}"/></div></div>
 												<div class="div-table-col"><div class="col-xs-8"><fmt:formatDate pattern="MM-dd-yyyy" value="${leaveDetail.endDate}"/></div></div>
-												<div class="div-table-col"><div class="col-xs-12">${leaveDetail.status} <c:if test="${leaveDetail.status == 'Pending'}"><button type="button" class="btn btn-xs btn-primary" style="margin-left: 25px;">Edit</button></c:if></div></div>
+												<div class="div-table-col"><div class="col-xs-12">${leaveDetail.status} <c:if test="${leaveDetail.status == 'Pending'}"><button type="submit" class="btn btn-xs btn-primary" style="margin-left: 25px;" name="apppliedLeaveId" value="${leaveDetail.id}">Edit</button></c:if></div></div>
 											</div>
 										</c:forEach>							
 							      </div>

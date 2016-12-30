@@ -6,9 +6,11 @@ package com.lms.controller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -64,6 +66,17 @@ public class LeaveMgtController {
 		List<IApplyLeave> leaveDetails = leaveManagementService.getLeaveDetailsForReportingUsers();
 		model.addObject("leaveDetails", leaveDetails);
 		model.setViewName("leaveDetailsForReporting");
+		return model;
+
+	}
+	
+	@RequestMapping(value = "/editLeaveForm",method = RequestMethod.GET)
+	public ModelAndView editLeaveForm(@RequestParam String apppliedLeaveId, Model m) {
+		IApplyLeave appliedLeaveDetails = leaveManagementService.getLeaveDetailsByLeaveId(Long.valueOf(apppliedLeaveId));
+		ModelAndView model = new ModelAndView();
+		model.addObject("leaveTypes", leaveManagementService.getLeaveTypes());
+		model.addObject("applyLeave",appliedLeaveDetails);
+		model.setViewName("applyLeaveForm");
 		return model;
 
 	}

@@ -16,6 +16,8 @@ import com.lms.rest.model.api.IUser;
  */
 public class ApplyLeave implements IApplyLeave{
 	
+	private Long id;
+	
 	private String appliedleaveType;
 	
 	@DateTimeFormat(pattern="yyyy-MM-dd")
@@ -112,6 +114,14 @@ public class ApplyLeave implements IApplyLeave{
 	 */
 	public void setAppliedBy(IUser appliedBy) {
 		this.appliedBy = appliedBy;
+	}
+
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
 	}
 	
 }

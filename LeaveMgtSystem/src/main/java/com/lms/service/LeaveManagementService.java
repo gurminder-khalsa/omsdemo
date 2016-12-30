@@ -88,15 +88,20 @@ public class LeaveManagementService implements ILeaveManagementService {
 		List<com.lms.db.model.ApplyLeave> leaveDetails = applyLeaveRepository.getLeaveDetailsForUser(userName);
 		List<IApplyLeave> leaveDetailsBO = new ArrayList<IApplyLeave>();
 		for (com.lms.db.model.ApplyLeave applyLeaveEntity : leaveDetails) {
-			IApplyLeave applyLeave = new com.lms.rest.model.ApplyLeave();
-			entityConverter.convertToDto(applyLeave,applyLeaveEntity);
-			applyLeave.setAppliedLeaveType(applyLeaveEntity.getLeaveType().getLeaveType());
-			IUser appliedBy = new com.lms.rest.model.User();
-			entityConverter.convertToDto(appliedBy,applyLeaveEntity.getUser());
-			applyLeave.setAppliedBy(appliedBy);
+			IApplyLeave applyLeave = getAppliedLeaveDetailsBO(applyLeaveEntity);
 			leaveDetailsBO.add(applyLeave);
 		}
 		return leaveDetailsBO;
+	}
+
+	private IApplyLeave getAppliedLeaveDetailsBO(com.lms.db.model.ApplyLeave applyLeaveEntity) {
+		IApplyLeave applyLeave = new com.lms.rest.model.ApplyLeave();
+		entityConverter.convertToDto(applyLeave,applyLeaveEntity);
+		applyLeave.setAppliedLeaveType(applyLeaveEntity.getLeaveType().getLeaveType());
+		IUser appliedBy = new com.lms.rest.model.User();
+		entityConverter.convertToDto(appliedBy,applyLeaveEntity.getUser());
+		applyLeave.setAppliedBy(appliedBy);
+		return applyLeave;
 	}
 
 	@Override
@@ -114,6 +119,13 @@ public class LeaveManagementService implements ILeaveManagementService {
 			leaveDetails.addAll(getLeaveDetailsForUser(user.getUserName()));
 		}
 		return leaveDetails;
+	}
+
+	@Override
+	public IApplyLeave getLeaveDetailsByLeaveId(Long appliedLeaveId) {
+		com.lms.db.model.ApplyLeave appliedLeaveEntity = applyLeaveRepository.findOne(appliedLeaveId);
+		return getAppliedLeaveDetailsBO(appliedLeaveEntity);
+		
 	}
 
 }
