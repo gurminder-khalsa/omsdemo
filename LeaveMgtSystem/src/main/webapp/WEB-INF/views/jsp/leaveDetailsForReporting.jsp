@@ -41,7 +41,7 @@
 							                <div class="div-table-col"><label for="example-text-input" class="col-xs-8 col-form-label">Leave Type</label></div>
 							                <div class="div-table-col"><label for="example-text-input" class="col-xs-8 col-form-label">Start Date</label></div>
 							                <div class="div-table-col"><label for="example-text-input" class="col-xs-8 col-form-label">End Date</label></div>
-							                <div class="div-table-col"><label for="example-text-input" class="col-xs-8 col-form-label">Status</label></div>
+							                <div class="div-table-col"><label for="example-text-input" class="col-xs-8 col-form-label">Action</label></div>
 							             </div>
 							            <!-- <div class="div-table-row">
 							                  <div class="div-table-col">001</div>
@@ -58,12 +58,22 @@
 												<div class="div-table-col"><div class="col-xs-6">${leaveDetail.appliedLeaveType}</div></div>
 												<div class="div-table-col"><div class="col-xs-8"><fmt:formatDate pattern="MM-dd-yyyy" value="${leaveDetail.startDate}"/></div></div>
 												<div class="div-table-col"><div class="col-xs-8"><fmt:formatDate pattern="MM-dd-yyyy" value="${leaveDetail.endDate}"/></div></div>
-												<div class="div-table-col"><div class="col-xs-12">${leaveDetail.status} <c:if test="${leaveDetail.status == 'Pending'}"><button type="button" class="btn btn-xs btn-primary" style="margin-left: 25px;">Edit</button></c:if></div></div>
+												<div class="div-table-col"><div class="col-xs-12">
+													<select class="form-control" id="${leaveDetail.id}">
+														<c:forEach var="leaveStatus" items="${leaveStatus}">
+															<option value="${leaveStatus.status}">${leaveStatus.status}</option>
+														</c:forEach>														
+													</select>
+												</div></div>
 											</div>
 										</c:forEach>							
-							      </div>
+							      </div>									
+								</div>	
+								<div id="morris-area-chart">
+									<button type="submit" class="btn btn-sm btn-success" style="margin-top: 10px;" name="apppliedLeaveId" value="${leaveDetail.id}">Submit</button>								  
 								</div>
                             </div>
+							
                         </div>
                     </div>
                 </div>
