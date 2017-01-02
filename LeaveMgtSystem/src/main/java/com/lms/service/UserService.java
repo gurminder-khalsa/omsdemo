@@ -67,7 +67,7 @@ public class UserService implements IUserService, UserDetailsService {
 		org.springframework.security.core.userdetails.User loggedInUser = (org.springframework.security.core.userdetails.User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		User userEntity = userRepository.findByUserName(loggedInUser.getUsername());
 		IUser user = new com.lms.rest.model.User();
-		entityConverter.convertToDto(user, userEntity);		
+		entityConverter.convert(user, userEntity);		
 		return user;
 	}
 

@@ -3,6 +3,7 @@
  */
 package com.lms.controller;
 
+import java.util.Arrays;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,9 +15,11 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.lms.exception.LMSException;
 import com.lms.rest.model.ApplyLeave;
 import com.lms.rest.model.api.IApplyLeave;
 import com.lms.service.api.ILeaveManagementService;
+import com.lms.utils.LeaveStatus;
 
 /**
  * @author gurminder.singh
@@ -43,17 +46,31 @@ public class LeaveMgtController {
 	public ModelAndView submitLeaveForm(@ModelAttribute("applyLeave") ApplyLeave applyLeave ) {
 		System.out.println("Apply leave called: "+applyLeave.getLeaveReason());
 		ModelAndView model = new ModelAndView();
-		leaveManagementService.submitLeaveDetails(applyLeave);
+		try {
+			leaveManagementService.submitLeaveDetails(applyLeave);
+		} catch (LMSException e) {
+			return showErrorPage(model, e);
+		}
 		model.addObject("leaveData", applyLeave);
-		//model.setViewName("applyLeave");
 		return getLeaveDetails();
 
+	}
+
+	private ModelAndView showErrorPage(ModelAndView model, LMSException e) {
+		model.addObject("error", e.getMessage());
+		model.setViewName("error");
+		return model;
 	}
 	
 	@RequestMapping(value = "/leaveDetails",method = RequestMethod.GET)
 	public ModelAndView getLeaveDetails() {
 		ModelAndView model = new ModelAndView();
-		List<IApplyLeave> leaveDetails = leaveManagementService.getLeaveDetailsForLoggedInUser();
+		List<IApplyLeave> leaveDetails = null;
+		try {
+			leaveDetails = leaveManagementService.getLeaveDetailsForLoggedInUser();
+		} catch (LMSException e) {
+			return showErrorPage(model, e);
+		}
 		model.addObject("leaveDetails", leaveDetails);
 		model.setViewName("leaveDetails");
 		return model;
@@ -63,7 +80,14 @@ public class LeaveMgtController {
 	@RequestMapping(value = "/manager/leaveDetails",method = RequestMethod.GET)
 	public ModelAndView getReportingLeaveDetails() {
 		ModelAndView model = new ModelAndView();
-		List<IApplyLeave> leaveDetails = leaveManagementService.getLeaveDetailsForReportingUsers();
+		List<IApplyLeave> leaveDetails = null;
+		List<LeaveStatus> leaveStatus = Arrays.asList(LeaveStatus.values());
+		model.addObject("leaveStatus", leaveStatus);
+		try {
+			leaveDetails = leaveManagementService.getLeaveDetailsForReportingUsers();
+		} catch (LMSException e) {
+			return showErrorPage(model, e);
+		}
 		model.addObject("leaveDetails", leaveDetails);
 		model.setViewName("leaveDetailsForReporting");
 		return model;

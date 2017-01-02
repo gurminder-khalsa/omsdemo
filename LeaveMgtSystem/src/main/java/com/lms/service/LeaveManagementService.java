@@ -15,6 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.lms.converter.EntityConverter;
 import com.lms.db.model.User;
+import com.lms.exception.LMSException;
 import com.lms.repository.ApplyLeaveRepository;
 import com.lms.repository.LeaveTypeRepository;
 import com.lms.repository.UserRepository;
@@ -57,7 +58,7 @@ public class LeaveManagementService implements ILeaveManagementService {
 
 	private ILeaveType convertToDto(com.lms.db.model.LeaveType leaveTypeEntity) {
 		ILeaveType leaveType = new LeaveType();
-		entityConverter.convertToDto(leaveType, leaveTypeEntity);
+		entityConverter.convert(leaveType, leaveTypeEntity);
 		return leaveType;
 	}
 
@@ -66,25 +67,33 @@ public class LeaveManagementService implements ILeaveManagementService {
 	 */
 	@Override	
 	@Transactional
-	public void submitLeaveDetails(IApplyLeave applyLeave) {
-		com.lms.db.model.ApplyLeave applyLeaveEntity = new com.lms.db.model.ApplyLeave(); 
-		applyLeaveEntity.setLeaveType(leaveTypeRepository.findByLeaveType(applyLeave.getAppliedLeaveType()));
-		applyLeaveEntity.setStartDate(applyLeave.getStartDate());
-		applyLeaveEntity.setEndDate(applyLeave.getEndDate());
-		applyLeaveEntity.setLeaveReason(applyLeave.getLeaveReason());
+	public void submitLeaveDetails(IApplyLeave applyLeave)  throws LMSException{
+		com.lms.db.model.ApplyLeave applyLeaveEntity = new com.lms.db.model.ApplyLeave();
+		entityConverter.convert(applyLeaveEntity, applyLeave);
+		applyLeaveEntity.setLeaveType(leaveTypeRepository.findByLeaveType(applyLeave.getAppliedLeaveType()));		
 		applyLeaveEntity.setStatus(LeaveStatus.PENDING.getStatus());
-		org.springframework.security.core.userdetails.User loggedInUser = (org.springframework.security.core.userdetails.User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		org.springframework.security.core.userdetails.User loggedInUser = getLoggedInUser();
 		User user = userRepository.findByUserName(loggedInUser.getUsername());
 		applyLeaveEntity.setUser(user);
 		applyLeaveRepository.save(applyLeaveEntity);
 		getLeaveDetailsForLoggedInUser();
 	}
 
+	private org.springframework.security.core.userdetails.User getLoggedInUser()  throws LMSException{
+		if(SecurityContextHolder.getContext().getAuthentication() == null){
+			throw new LMSException("User not logged in");	
+		}else if(!((org.springframework.security.core.userdetails.User) SecurityContextHolder.getContext().getAuthentication().getPrincipal() instanceof org.springframework.security.core.userdetails.User)){
+			throw new LMSException("User not logged in");			
+		}
+		org.springframework.security.core.userdetails.User loggedInUser = (org.springframework.security.core.userdetails.User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		return loggedInUser;
+	}
+
 	/* (non-Javadoc)
 	 * @see com.lms.service.api.ILeaveManagementService#getLeaveDetailsForUser(java.lang.Long)
 	 */
 	@Override
-	public List<IApplyLeave> getLeaveDetailsForUser(String userName) {
+	public List<IApplyLeave> getLeaveDetailsForUser(String userName)  throws LMSException{
 		List<com.lms.db.model.ApplyLeave> leaveDetails = applyLeaveRepository.getLeaveDetailsForUser(userName);
 		List<IApplyLeave> leaveDetailsBO = new ArrayList<IApplyLeave>();
 		for (com.lms.db.model.ApplyLeave applyLeaveEntity : leaveDetails) {
@@ -96,23 +105,23 @@ public class LeaveManagementService implements ILeaveManagementService {
 
 	private IApplyLeave getAppliedLeaveDetailsBO(com.lms.db.model.ApplyLeave applyLeaveEntity) {
 		IApplyLeave applyLeave = new com.lms.rest.model.ApplyLeave();
-		entityConverter.convertToDto(applyLeave,applyLeaveEntity);
+		entityConverter.convert(applyLeave,applyLeaveEntity);
 		applyLeave.setAppliedLeaveType(applyLeaveEntity.getLeaveType().getLeaveType());
 		IUser appliedBy = new com.lms.rest.model.User();
-		entityConverter.convertToDto(appliedBy,applyLeaveEntity.getUser());
+		entityConverter.convert(appliedBy,applyLeaveEntity.getUser());
 		applyLeave.setAppliedBy(appliedBy);
 		return applyLeave;
 	}
 
 	@Override
-	public List<IApplyLeave> getLeaveDetailsForLoggedInUser() {
-		org.springframework.security.core.userdetails.User loggedInUser = (org.springframework.security.core.userdetails.User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+	public List<IApplyLeave> getLeaveDetailsForLoggedInUser()  throws LMSException{
+		org.springframework.security.core.userdetails.User loggedInUser = getLoggedInUser();
 		return getLeaveDetailsForUser(loggedInUser.getUsername());
 	}
 
 	@Override
-	public List<IApplyLeave> getLeaveDetailsForReportingUsers() {
-		org.springframework.security.core.userdetails.User loggedInUser = (org.springframework.security.core.userdetails.User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+	public List<IApplyLeave> getLeaveDetailsForReportingUsers()  throws LMSException{
+		org.springframework.security.core.userdetails.User loggedInUser = getLoggedInUser();
 		List<User> reportingUsers = userRepository.findUsersByManager(loggedInUser.getUsername());
 		List<IApplyLeave> leaveDetails = new ArrayList<IApplyLeave>();
 		for (User user : reportingUsers) {

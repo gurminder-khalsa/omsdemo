@@ -15,7 +15,7 @@ import org.springframework.stereotype.Component;
 public class EntityConverter<X,Y> {
 	@Autowired
 	private ModelMapper modelMapper;
-	public  X convertToDto(X convertTo, Y convertFrom) {
+	public  X convert(X convertTo, Y convertFrom) {
 		modelMapper.map(convertFrom, convertTo);
 		return convertTo;
 	}
