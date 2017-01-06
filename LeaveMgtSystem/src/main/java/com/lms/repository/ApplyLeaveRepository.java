@@ -19,7 +19,7 @@ import com.lms.db.model.ApplyLeave;
 @Repository
 public interface ApplyLeaveRepository extends JpaRepository<ApplyLeave, Long> {
 	
-	@Query(value="from ApplyLeave aplyLeave where aplyLeave.user.userName=:userName")
+	@Query(value="from ApplyLeave aplyLeave where aplyLeave.user.userName=:userName order by aplyLeave.startDate")
 	List<ApplyLeave> getLeaveDetailsForUser(@Param("userName")String userName);
 
 }
