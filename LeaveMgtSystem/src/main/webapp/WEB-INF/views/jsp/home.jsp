@@ -10,11 +10,11 @@
                 <div class="row">
                     <div class="col-lg-12">
                         <h1 class="page-header">
-                            Dashboard <small>Statistics Overview</small>
+                            <spring:message code="dashboard.title" ></spring:message>  <small>Statistics Overview</small>
                         </h1>
                         <ol class="breadcrumb">
                             <li class="active">
-                                <i class="fa fa-dashboard"></i> Dashboard
+                                <i class="fa fa-dashboard"></i> <spring:message code="dashboard.title"/>
                             </li>
                         </ol>
                     </div>
@@ -112,7 +112,7 @@
                 </div>
                 <!-- /.row -->
 
-                <div class="row">
+                <!-- <div class="row">
                     <div class="col-lg-12">
                         <div class="panel panel-default">
                             <div class="panel-heading">
@@ -123,10 +123,10 @@
                             </div>
                         </div>
                     </div>
-                </div>
+                </div> -->
                 <!-- /.row -->
 
-                <div class="row">
+                <!--<div class="row">
                     <div class="col-lg-4">
                         <div class="panel panel-default">
                             <div class="panel-heading">
@@ -260,7 +260,7 @@
                             </div>
                         </div>
                     </div>
-                </div>
+                </div> -->
                 <!-- /.row -->
 
             </div>

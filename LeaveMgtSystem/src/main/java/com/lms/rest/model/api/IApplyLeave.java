@@ -11,6 +11,10 @@ import java.util.Date;
  */
 public interface IApplyLeave {
 	
+	public Long getId();
+	
+	public void setId(Long id);
+	
 	public String getAppliedLeaveType();
 	
 	public void setAppliedLeaveType(String leaveType);

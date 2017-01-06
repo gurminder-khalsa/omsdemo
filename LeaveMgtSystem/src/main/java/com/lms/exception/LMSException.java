@@ -3,6 +3,8 @@
  */
 package com.lms.exception;
 
+import com.lms.utils.ExceptionKey;
+
 /**
  * @author gurminder.singh
  *
@@ -11,6 +13,7 @@ public class LMSException extends Exception {
 
 	private static final long serialVersionUID = -6576802182985246587L;
 	private String message = null;
+	private ExceptionKey exceptionKey;
 	
 	public LMSException(String message){
 		 super(message);
@@ -21,6 +24,13 @@ public class LMSException extends Exception {
 		 super(message , ex);
 	     this.message = message;
 	}
+	
+	public LMSException(ExceptionKey exceptionKey, String message){
+		 super(message);
+	     this.message = message;
+	     this.exceptionKey = exceptionKey;
+	}
+	
 	
 	public LMSException(Throwable cause){
 		 super(cause);
@@ -34,6 +44,10 @@ public class LMSException extends Exception {
     @Override
     public String getMessage() {
         return message;
+    }
+    
+    public ExceptionKey getExceptionKey(){
+    	return exceptionKey;
     }
 
 }

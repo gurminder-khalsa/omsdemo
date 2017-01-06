@@ -15,16 +15,21 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.lms.converter.EntityConverter;
 import com.lms.db.model.User;
+import com.lms.db.model.UserLeaves;
 import com.lms.exception.LMSException;
 import com.lms.repository.ApplyLeaveRepository;
 import com.lms.repository.LeaveTypeRepository;
+import com.lms.repository.UserLeavesRepository;
 import com.lms.repository.UserRepository;
+import com.lms.rest.model.ApplyLeave;
 import com.lms.rest.model.LeaveType;
 import com.lms.rest.model.api.IApplyLeave;
 import com.lms.rest.model.api.ILeaveType;
 import com.lms.rest.model.api.IUser;
 import com.lms.service.api.ILeaveManagementService;
+import com.lms.utils.ExceptionKey;
 import com.lms.utils.LeaveStatus;
+import com.lms.utils.LeaveTypes;
 
 /**
  * @author gurminder.singh
@@ -40,6 +45,9 @@ public class LeaveManagementService implements ILeaveManagementService {
 	
 	@Autowired
 	private UserRepository userRepository;
+	
+	@Autowired
+	private UserLeavesRepository userLeavesRepository;
 	
 	@Autowired
 	private ModelMapper modelMapper;
@@ -68,15 +76,45 @@ public class LeaveManagementService implements ILeaveManagementService {
 	@Override	
 	@Transactional
 	public void submitLeaveDetails(IApplyLeave applyLeave)  throws LMSException{
+		Long appliedLeaveId = applyLeave.getId();
+		UserLeaves userLeave = getUserLeaves(applyLeave);
+		if(appliedLeaveId == null && (userLeave.getNumberOfLeaves() == 0)){
+			throw new LMSException(ExceptionKey.Leaves_Exhausted,"No. of Leaves Exhausted");
+		}
 		com.lms.db.model.ApplyLeave applyLeaveEntity = new com.lms.db.model.ApplyLeave();
 		entityConverter.convert(applyLeaveEntity, applyLeave);
-		applyLeaveEntity.setLeaveType(leaveTypeRepository.findByLeaveType(applyLeave.getAppliedLeaveType()));		
+		if(userLeave.getLeaveType().getLeaveType().equals(LeaveTypes.LOSS_OFF_PAY.getLeaveType())){
+			applyLeaveEntity.setLeaveType(userLeave.getLeaveType());
+		}else{
+			applyLeaveEntity.setLeaveType(leaveTypeRepository.findByLeaveType(applyLeave.getAppliedLeaveType()));
+		}
 		applyLeaveEntity.setStatus(LeaveStatus.PENDING.getStatus());
 		org.springframework.security.core.userdetails.User loggedInUser = getLoggedInUser();
 		User user = userRepository.findByUserName(loggedInUser.getUsername());
-		applyLeaveEntity.setUser(user);
-		applyLeaveRepository.save(applyLeaveEntity);
+		applyLeaveEntity.setUser(user);		
+		applyLeaveRepository.save(applyLeaveEntity);	
+		if(appliedLeaveId == null && !userLeave.getLeaveType().getLeaveType().equals(LeaveTypes.LOSS_OFF_PAY.getLeaveType())){
+			userLeave.setNumberOfLeaves(Long.valueOf(userLeave.getNumberOfLeaves().longValue() - 1));
+			userLeavesRepository.save(userLeave);
+		}
+		
 		getLeaveDetailsForLoggedInUser();
+	}
+
+	private UserLeaves getUserLeaves(IApplyLeave applyLeave) throws LMSException{
+		org.springframework.security.core.userdetails.User loggedInUser = getLoggedInUser();
+		UserLeaves userLeave = userLeavesRepository.findLeavesForUserByLeaveType(loggedInUser.getUsername(),applyLeave.getAppliedLeaveType());
+		if(userLeave == null){
+			userLeave = userLeavesRepository.findLeavesForUserByLeaveType(loggedInUser.getUsername(),LeaveTypes.LOSS_OFF_PAY.getLeaveType());
+		}
+		if(userLeave == null){
+			userLeave = new UserLeaves();
+			userLeave.setLeaveType(leaveTypeRepository.findByLeaveType(LeaveTypes.LOSS_OFF_PAY.getLeaveType()));
+			userLeave.setUser(userRepository.findByUserName(loggedInUser.getUsername()));
+			userLeave.setNumberOfLeaves(-1l);
+			userLeavesRepository.save(userLeave);
+		}
+		return userLeave;
 	}
 
 	private org.springframework.security.core.userdetails.User getLoggedInUser()  throws LMSException{
@@ -135,6 +173,30 @@ public class LeaveManagementService implements ILeaveManagementService {
 		com.lms.db.model.ApplyLeave appliedLeaveEntity = applyLeaveRepository.findOne(appliedLeaveId);
 		return getAppliedLeaveDetailsBO(appliedLeaveEntity);
 		
+	}
+
+	@Override
+	@Transactional
+	public void updateLeaveStatus(List<ApplyLeave> applyLeaves) {
+		List<com.lms.db.model.ApplyLeave> applyLeaveEntities = new ArrayList<com.lms.db.model.ApplyLeave>();
+		for (ApplyLeave applyLeave : applyLeaves) {
+			com.lms.db.model.ApplyLeave appliedLeaveEntity = applyLeaveRepository.findOne(applyLeave.getId());
+			appliedLeaveEntity.setStatus(applyLeave.getStatus());
+			applyLeaveEntities.add(appliedLeaveEntity);
+		}
+		applyLeaveRepository.save(applyLeaveEntities);
+		
+	}
+
+	@Override
+	@Transactional
+	public void cancelLeave(IApplyLeave applyLeave) throws LMSException {
+		com.lms.db.model.ApplyLeave applyLeaveEntity = applyLeaveRepository.findOne(applyLeave.getId());
+		applyLeaveEntity.setStatus(LeaveStatus.CANCELLED.getStatus());
+		applyLeaveRepository.save(applyLeaveEntity);
+		UserLeaves userLeave = getUserLeaves(applyLeave);
+		userLeave.setNumberOfLeaves(Long.valueOf(userLeave.getNumberOfLeaves().longValue() + 1));
+		userLeavesRepository.save(userLeave);
 	}
 
 }

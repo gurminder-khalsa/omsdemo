@@ -20,10 +20,10 @@ public class ApplyLeave implements IApplyLeave{
 	
 	private String appliedleaveType;
 	
-	@DateTimeFormat(pattern="yyyy-MM-dd")
+	@DateTimeFormat(pattern="mm-dd-yy")
 	private Date startDate;
 	
-	@DateTimeFormat(pattern="yyyy-MM-dd")
+	@DateTimeFormat(pattern="mm-dd-yy")
 	private Date endDate;
 	
 	private String leaveReason;

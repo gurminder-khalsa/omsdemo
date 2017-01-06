@@ -12,7 +12,9 @@ public enum LeaveStatus {
 
     APPROVED("Approved"),
 
-    REJECTED("Rejected");
+    REJECTED("Rejected"),
+	
+	CANCELLED("Cancelled");
 
     private String status;
 

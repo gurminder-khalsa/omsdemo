@@ -14,7 +14,7 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>SB Admin - Bootstrap Admin Template</title>
+    <title><spring:message code="application.title"/></title>
 
     <!-- Bootstrap Core CSS -->
     <link href="/leavemgt/css/bootstrap.min.css" rel="stylesheet">

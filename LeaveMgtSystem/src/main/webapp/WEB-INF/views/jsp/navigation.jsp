@@ -7,7 +7,7 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <a class="navbar-brand" href="index.html">Leave Management System</a>
+                <a class="navbar-brand" href="index.html"><spring:message code="application.title"/></a>
             </div>
             <!-- Top Menu Items -->
             <ul class="nav navbar-right top-nav">
@@ -26,7 +26,7 @@
                         </li>
                         <li class="divider"></li>
                         <li>
-                            <a href="/leavemgt/logout"><i class="fa fa-fw fa-power-off"></i> Log Out</a>
+                            <a href="/leavemgt/logout"><i class="fa fa-fw fa-power-off"></i> <spring:message code="label.logout"/></a>
                         </li>
                     </ul>
                 </li>
@@ -35,21 +35,21 @@
             <div class="collapse navbar-collapse navbar-ex1-collapse">
                 <ul class="nav navbar-nav side-nav">					
                     <li <c:if test="${homeSelected}"> class="active" </c:if>>
-                        <a href="/leavemgt"><i class="fa fa-fw fa-dashboard"></i> Dashboard</a>
+                        <a href="/leavemgt"><i class="fa fa-fw fa-dashboard"></i> <spring:message code="dashboard.title"/></a>
                     </li>					
                     <li <c:if test="${applyLeaveSelected}"> class="active" </c:if>>
-                        <a href="/leavemgt/lms/applyLeaveForm"><i class="fa fa-fw fa-bar-chart-o"></i> Apply Leave</a>
+                        <a href="/leavemgt/lms/applyLeaveForm"><i class="fa fa-fw fa-edit"></i> <spring:message code="apply.leave"/></a>
                     </li>
                     <li <c:if test="${leaveDetailsSelected}"> class="active" </c:if>>
-                        <a href="/leavemgt/lms/leaveDetails"><i class="fa fa-fw fa-table"></i> My Leave Details</a>
+                        <a href="/leavemgt/lms/leaveDetails"><i class="fa fa-fw fa-table"></i> <spring:message code="my.applied.leaves"/></a>
                     </li>
                     <sec:authorize access="hasRole('ROLE_MANAGER')">
 					    <li <c:if test="${leaveDetailsForReportingSelected}"> class="active" </c:if>>
-	                        <a href="/leavemgt/lms/manager/leaveDetails"><i class="fa fa-fw fa-edit"></i> Leave Details for Reporting</a>
+	                        <a href="/leavemgt/lms/manager/leaveDetails"><i class="fa fa-fw fa-table"></i> <spring:message code="reporting.applied.leaves"/></a>
 	                    </li>
 					</sec:authorize>
                     
-                    <li>
+                    <!-- <li>
                         <a href="bootstrap-elements.html"><i class="fa fa-fw fa-desktop"></i> Bootstrap Elements</a>
                     </li>
                     <li>
@@ -71,7 +71,7 @@
                     </li>
                     <li>
                         <a href="index-rtl.html"><i class="fa fa-fw fa-dashboard"></i> RTL Dashboard</a>
-                    </li>
+                    </li> -->
                 </ul>
             </div>
             <!-- /.navbar-collapse -->
