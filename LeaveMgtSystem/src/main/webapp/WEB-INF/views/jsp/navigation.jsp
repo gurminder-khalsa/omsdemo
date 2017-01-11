@@ -41,7 +41,7 @@
                         <a href="/leavemgt/lms/applyLeaveForm"><i class="fa fa-fw fa-edit"></i> <spring:message code="apply.leave"/></a>
                     </li>
                     <li <c:if test="${leaveDetailsSelected}"> class="active" </c:if>>
-                        <a href="/leavemgt/lms/leaveDetails"><i class="fa fa-fw fa-table"></i> <spring:message code="my.applied.leaves"/></a>
+                        <a href="/leavemgt/lms/appliedLeaves"><i class="fa fa-fw fa-table"></i> <spring:message code="my.applied.leaves"/></a>
                     </li>
                     <sec:authorize access="hasRole('ROLE_MANAGER')">
 					    <li <c:if test="${leaveDetailsForReportingSelected}"> class="active" </c:if>>

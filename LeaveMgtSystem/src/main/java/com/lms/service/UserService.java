@@ -17,9 +17,11 @@ import org.springframework.stereotype.Service;
 import com.lms.converter.EntityConverter;
 import com.lms.db.model.User;
 import com.lms.db.model.UserRole;
+import com.lms.exception.LMSException;
 import com.lms.repository.UserRepository;
 import com.lms.rest.model.api.IUser;
 import com.lms.service.api.IUserService;
+import com.lms.utils.ExceptionKey;
 
 
 @Service
@@ -60,9 +62,9 @@ public class UserService implements IUserService, UserDetailsService {
 	}
 	
 	@Override
-	public IUser getLoggedInUser() throws Exception{
+	public IUser getLoggedInUser() throws LMSException{
 		if(!((org.springframework.security.core.userdetails.User) SecurityContextHolder.getContext().getAuthentication().getPrincipal() instanceof org.springframework.security.core.userdetails.User)){
-			throw new Exception("User not logged in");
+			throw new LMSException(ExceptionKey.User_Not_Found,"User not logged in");
 		}
 		org.springframework.security.core.userdetails.User loggedInUser = (org.springframework.security.core.userdetails.User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		User userEntity = userRepository.findByUserName(loggedInUser.getUsername());

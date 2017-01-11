@@ -21,7 +21,10 @@ import com.lms.exception.LMSException;
 import com.lms.rest.model.ApplyLeave;
 import com.lms.rest.model.LeaveDetailsForm;
 import com.lms.rest.model.api.IApplyLeave;
+import com.lms.rest.model.api.IUser;
+import com.lms.rest.model.api.IUserLeave;
 import com.lms.service.api.ILeaveManagementService;
+import com.lms.service.api.IUserService;
 import com.lms.utils.ExceptionKey;
 import com.lms.utils.LeaveStatus;
 
@@ -35,6 +38,9 @@ public class LeaveMgtController {
 	
 	@Autowired
 	private ILeaveManagementService leaveManagementService;
+	
+	@Autowired
+	private IUserService userService;
 	
 	@RequestMapping(value = "/applyLeaveForm",method = RequestMethod.GET)
 	public ModelAndView applyLeaveForm() {
@@ -66,7 +72,7 @@ public class LeaveMgtController {
 			return showErrorPage(model, e);
 		}
 		model.addObject("leaveData", applyLeave);
-		return getLeaveDetails();
+		return getAppliedLeaves();
 
 	}
 	
@@ -77,7 +83,7 @@ public class LeaveMgtController {
 		} catch (LMSException e) {
 			e.printStackTrace();
 		}
-		return getLeaveDetails();
+		return getAppliedLeaves();
 
 	}
 
@@ -87,8 +93,8 @@ public class LeaveMgtController {
 		return model;
 	}
 	
-	@RequestMapping(value = "/leaveDetails",method = RequestMethod.GET)
-	public ModelAndView getLeaveDetails() {
+	@RequestMapping(value = "/appliedLeaves",method = RequestMethod.GET)
+	public ModelAndView getAppliedLeaves() {
 		ModelAndView model = new ModelAndView();
 		List<IApplyLeave> leaveDetails = null;
 		try {
@@ -146,9 +152,22 @@ public class LeaveMgtController {
 		leaveManagementService.updateLeaveStatus(applyLeaves);
 		return getReportingLeaveDetails();
 	}
-	
-	
-	
-	
+		
+	@RequestMapping(value = "/userProfile",method = RequestMethod.GET)
+	public ModelAndView getUserProfile() {
+		ModelAndView model = new ModelAndView();
+		IUser user = null;
+		try {
+			user = userService.getLoggedInUser();
+		} catch (LMSException e) {
+			return showErrorPage(model, e);
+		}
+		List<IUserLeave> userLeaves = leaveManagementService.getUserLeaves(user.getUserName());
+		model.addObject("userDetails", user);
+		model.addObject("userLeaves", userLeaves);		
+		model.setViewName("userProfile");
+		return model;
+
+	}
 
 }

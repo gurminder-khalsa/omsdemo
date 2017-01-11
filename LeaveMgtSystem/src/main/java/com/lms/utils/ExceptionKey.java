@@ -8,7 +8,7 @@ package com.lms.utils;
  *
  */
 public enum ExceptionKey {
-	Leaves_Exhausted("Leaves_Exhausted");
+	Leaves_Exhausted("Leaves_Exhausted"), User_Not_Found("User_Not_Found");
 	
 	String errorValue;
 	

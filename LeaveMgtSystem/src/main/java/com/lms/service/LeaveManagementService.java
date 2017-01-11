@@ -23,9 +23,11 @@ import com.lms.repository.UserLeavesRepository;
 import com.lms.repository.UserRepository;
 import com.lms.rest.model.ApplyLeave;
 import com.lms.rest.model.LeaveType;
+import com.lms.rest.model.UserLeave;
 import com.lms.rest.model.api.IApplyLeave;
 import com.lms.rest.model.api.ILeaveType;
 import com.lms.rest.model.api.IUser;
+import com.lms.rest.model.api.IUserLeave;
 import com.lms.service.api.ILeaveManagementService;
 import com.lms.utils.ExceptionKey;
 import com.lms.utils.LeaveStatus;
@@ -61,10 +63,10 @@ public class LeaveManagementService implements ILeaveManagementService {
 	@Override
 	public List<ILeaveType> getLeaveTypes() {
 		List<com.lms.db.model.LeaveType> leaveTypes = leaveTypeRepository.findAll();
-		return leaveTypes.stream().map(leaveTypeEntity -> convertToDto(leaveTypeEntity)).collect(Collectors.toList());
+		return leaveTypes.stream().map(leaveTypeEntity -> convertLeaveTypeDto(leaveTypeEntity)).collect(Collectors.toList());
 	}
 
-	private ILeaveType convertToDto(com.lms.db.model.LeaveType leaveTypeEntity) {
+	private ILeaveType convertLeaveTypeDto(com.lms.db.model.LeaveType leaveTypeEntity) {
 		ILeaveType leaveType = new LeaveType();
 		entityConverter.convert(leaveType, leaveTypeEntity);
 		return leaveType;
@@ -199,4 +201,16 @@ public class LeaveManagementService implements ILeaveManagementService {
 		userLeavesRepository.save(userLeave);
 	}
 
+	@Override
+	public List<IUserLeave> getUserLeaves(String userName) {
+		List<UserLeaves> userLeaveEntities = userLeavesRepository.findLeavesForUser(userName);
+		List<IUserLeave> userLeaves = new ArrayList<IUserLeave>(); 
+		for (UserLeaves userLeave : userLeaveEntities) {
+			IUserLeave userLeaveModel = new UserLeave();
+			userLeaveModel.setLeaveType(convertLeaveTypeDto(userLeave.getLeaveType()));
+			userLeaveModel.setNumberOfLeaves(userLeave.getNumberOfLeaves());
+			userLeaves.add(userLeaveModel);
+		}
+		return userLeaves;
+	}
 }

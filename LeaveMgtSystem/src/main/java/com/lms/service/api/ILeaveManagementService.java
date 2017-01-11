@@ -9,6 +9,7 @@ import com.lms.exception.LMSException;
 import com.lms.rest.model.ApplyLeave;
 import com.lms.rest.model.api.IApplyLeave;
 import com.lms.rest.model.api.ILeaveType;
+import com.lms.rest.model.api.IUserLeave;
 
 /**
  * @author gurminder.singh
@@ -24,5 +25,5 @@ public interface ILeaveManagementService {
 	public IApplyLeave getLeaveDetailsByLeaveId(Long appliedLeaveId);
 	public void updateLeaveStatus(List<ApplyLeave> applyLeaves);
 	public void cancelLeave(IApplyLeave applyLeave) throws LMSException;
-
+	public List<IUserLeave> getUserLeaves(String userName);
 }

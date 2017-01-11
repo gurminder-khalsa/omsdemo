@@ -6,6 +6,7 @@ package com.lms.service.api;
 import java.util.List;
 
 import com.lms.db.model.User;
+import com.lms.exception.LMSException;
 import com.lms.rest.model.api.IUser;
 
 /**
@@ -15,5 +16,5 @@ import com.lms.rest.model.api.IUser;
 public interface IUserService {
 	public List<User> getAllUser();
 	
-	public IUser getLoggedInUser() throws Exception;
+	public IUser getLoggedInUser()  throws LMSException;
 }
