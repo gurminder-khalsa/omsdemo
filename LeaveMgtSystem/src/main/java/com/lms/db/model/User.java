@@ -42,12 +42,12 @@ public class User {
 	
 	@OneToMany(mappedBy="user", cascade=CascadeType.ALL, fetch=FetchType.EAGER)
 	private Set<UserRole> userRole;
-	
-	@OneToMany(mappedBy="user", cascade=CascadeType.ALL, fetch=FetchType.EAGER)
-	private Set<ReportingUser> reportingUser;
-	
+			
 	@OneToOne
 	private User manager;
+	
+	@OneToOne(mappedBy="user", cascade=CascadeType.ALL, fetch=FetchType.EAGER)
+	private UserContact userContact;
  
 	/**
 	 * @return the id
@@ -132,21 +132,7 @@ public class User {
 	public void setUserRole(Set<UserRole> userRole) {
 		this.userRole = userRole;
 	}
-
-	/**
-	 * @return the reportingUser
-	 */
-	public Set<ReportingUser> getReportingUser() {
-		return reportingUser;
-	}
-
-	/**
-	 * @param reportingUser the reportingUser to set
-	 */
-	public void setReportingUser(Set<ReportingUser> reportingUser) {
-		this.reportingUser = reportingUser;
-	}
-
+	
 	/**
 	 * @return the manager
 	 */
@@ -159,6 +145,14 @@ public class User {
 	 */
 	public void setManager(User manager) {
 		this.manager = manager;
+	}
+
+	public UserContact getUserContact() {
+		return userContact;
+	}
+
+	public void setUserContact(UserContact userContact) {
+		this.userContact = userContact;
 	}
 	
 }

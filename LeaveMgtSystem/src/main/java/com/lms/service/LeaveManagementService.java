@@ -4,14 +4,26 @@
 package com.lms.service;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
+import javax.mail.Message;
+import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeMessage;
+
+import org.apache.velocity.app.VelocityEngine;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.mail.MailException;
+import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.MimeMessageHelper;
+import org.springframework.mail.javamail.MimeMessagePreparator;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.ui.velocity.VelocityEngineUtils;
 
 import com.lms.converter.EntityConverter;
 import com.lms.db.model.User;
@@ -56,6 +68,12 @@ public class LeaveManagementService implements ILeaveManagementService {
 	
 	@Autowired
 	private EntityConverter entityConverter;
+	
+	 @Autowired
+	 JavaMailSender mailSender;
+	 
+	 @Autowired
+	 private VelocityEngine velocityEngine;
 
 	/* (non-Javadoc)
 	 * @see com.lms.service.api.ILeaveManagementService#getLeaveTypes()
@@ -100,8 +118,65 @@ public class LeaveManagementService implements ILeaveManagementService {
 			userLeavesRepository.save(userLeave);
 		}
 		
+		sendLeaveAppliedMailForApproval(user, applyLeaveEntity);
+		sendLeaveAppliedMailToApplier(user, applyLeaveEntity);
 		getLeaveDetailsForLoggedInUser();
 	}
+
+	private void sendLeaveAppliedMailForApproval(User user, com.lms.db.model.ApplyLeave applyLeaveEntity) {
+		MimeMessagePreparator preparator = new MimeMessagePreparator(){
+ 
+            public void prepare(MimeMessage mimeMessage) throws Exception {
+            	MimeMessageHelper helper;
+                helper = new MimeMessageHelper(mimeMessage, true);
+                helper.setFrom(new InternetAddress(user.getUserContact().getEmailAddress()));
+                helper.setTo(new InternetAddress(user.getManager().getUserContact().getEmailAddress()));
+                
+                Map<String, Object> model = new HashMap<String, Object>();
+                model.put("user", user);
+                model.put("leaveDetails", applyLeaveEntity);
+                String text = VelocityEngineUtils.mergeTemplateIntoString(velocityEngine, "templates/applyMailTemplateForApproval.vm", model);
+                helper.setText(text,true);                               
+                helper.setSubject("Leave Applied");
+            }
+        };
+		
+        try {
+            mailSender.send(preparator);
+            System.out.println("Message Send...Hurrey");
+        } catch (MailException ex) {
+            ex.printStackTrace();
+        }
+		
+	}
+	
+	private void sendLeaveAppliedMailToApplier(User user, com.lms.db.model.ApplyLeave applyLeaveEntity) {
+		MimeMessagePreparator preparator = new MimeMessagePreparator(){
+ 
+            public void prepare(MimeMessage mimeMessage) throws Exception {
+            	MimeMessageHelper helper;
+                helper = new MimeMessageHelper(mimeMessage, true);
+                helper.setFrom(new InternetAddress("donotreply@lms.com"));
+                helper.setTo(new InternetAddress(user.getUserContact().getEmailAddress()));
+                
+                Map<String, Object> model = new HashMap<String, Object>();
+                model.put("user", user);
+                model.put("leaveDetails", applyLeaveEntity);
+                String text = VelocityEngineUtils.mergeTemplateIntoString(velocityEngine, "templates/applyMailTemplateToApplier.vm", model);
+                helper.setText(text,true);                               
+                helper.setSubject("Leave Applied");
+            }
+        };
+		
+        try {
+            mailSender.send(preparator);
+            System.out.println("Message Send...Hurrey");
+        } catch (MailException ex) {
+            ex.printStackTrace();
+        }
+		
+	}
+
 
 	private UserLeaves getUserLeaves(IApplyLeave applyLeave) throws LMSException{
 		org.springframework.security.core.userdetails.User loggedInUser = getLoggedInUser();

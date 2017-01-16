@@ -44,12 +44,58 @@ INSERT INTO lms_leave_type (leave_type_id, leave_description, leave_type) VALUES
 -- Data for Name: user_leaves; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
-INSERT INTO user_leaves (user_leave_id, number_of_leaves, leavetype_leave_type_id, user_user_id) VALUES (3, 4, 3, 2);
-INSERT INTO user_leaves (user_leave_id, number_of_leaves, leavetype_leave_type_id, user_user_id) VALUES (4, 4, 1, 3);
-INSERT INTO user_leaves (user_leave_id, number_of_leaves, leavetype_leave_type_id, user_user_id) VALUES (5, 4, 2, 3);
-INSERT INTO user_leaves (user_leave_id, number_of_leaves, leavetype_leave_type_id, user_user_id) VALUES (6, 4, 3, 3);
-INSERT INTO user_leaves (user_leave_id, number_of_leaves, leavetype_leave_type_id, user_user_id) VALUES (1, 3, 1, 2);
-INSERT INTO user_leaves (user_leave_id, number_of_leaves, leavetype_leave_type_id, user_user_id) VALUES (2, 5, 2, 2);
-INSERT INTO user_leaves (user_leave_id, number_of_leaves, leavetype_leave_type_id, user_user_id) VALUES (29, -1, 5, 1);
+-- Inserting leaves for User: Gurminder
+INSERT INTO user_leaves (user_leave_id, number_of_leaves, leavetype_leave_type_id, user_user_id) VALUES ((select count(user_leave_id)+1 from user_leaves), 5, 1, (select user_id from lms_user where first_name='Gurminder'));
+INSERT INTO user_leaves (user_leave_id, number_of_leaves, leavetype_leave_type_id, user_user_id) VALUES ((select count(user_leave_id)+1 from user_leaves), 5, 2, (select user_id from lms_user where first_name='Gurminder'));
+INSERT INTO user_leaves (user_leave_id, number_of_leaves, leavetype_leave_type_id, user_user_id) VALUES ((select count(user_leave_id)+1 from user_leaves), 5, 3, (select user_id from lms_user where first_name='Gurminder'));
+INSERT INTO user_leaves (user_leave_id, number_of_leaves, leavetype_leave_type_id, user_user_id) VALUES ((select count(user_leave_id)+1 from user_leaves), 5, 4, (select user_id from lms_user where first_name='Gurminder'));
+INSERT INTO user_leaves (user_leave_id, number_of_leaves, leavetype_leave_type_id, user_user_id) VALUES ((select count(user_leave_id)+1 from user_leaves), -1, 5, (select user_id from lms_user where first_name='Gurminder'));
 
+-- Inserting leaves for User: Manoj
+INSERT INTO user_leaves (user_leave_id, number_of_leaves, leavetype_leave_type_id, user_user_id) VALUES ((select count(user_leave_id)+1 from user_leaves), 5, 1, (select user_id from lms_user where first_name='Manoj'));
+INSERT INTO user_leaves (user_leave_id, number_of_leaves, leavetype_leave_type_id, user_user_id) VALUES ((select count(user_leave_id)+1 from user_leaves), 5, 2, (select user_id from lms_user where first_name='Manoj'));
+INSERT INTO user_leaves (user_leave_id, number_of_leaves, leavetype_leave_type_id, user_user_id) VALUES ((select count(user_leave_id)+1 from user_leaves), 5, 3, (select user_id from lms_user where first_name='Manoj'));
+INSERT INTO user_leaves (user_leave_id, number_of_leaves, leavetype_leave_type_id, user_user_id) VALUES ((select count(user_leave_id)+1 from user_leaves), 5, 4, (select user_id from lms_user where first_name='Manoj'));
+INSERT INTO user_leaves (user_leave_id, number_of_leaves, leavetype_leave_type_id, user_user_id) VALUES ((select count(user_leave_id)+1 from user_leaves), -1, 5, (select user_id from lms_user where first_name='Manoj'));
 
+-- Inserting leaves for User: Ankit
+INSERT INTO user_leaves (user_leave_id, number_of_leaves, leavetype_leave_type_id, user_user_id) VALUES ((select count(user_leave_id)+1 from user_leaves), 5, 1, (select user_id from lms_user where first_name='Ankit'));
+INSERT INTO user_leaves (user_leave_id, number_of_leaves, leavetype_leave_type_id, user_user_id) VALUES ((select count(user_leave_id)+1 from user_leaves), 5, 2, (select user_id from lms_user where first_name='Ankit'));
+INSERT INTO user_leaves (user_leave_id, number_of_leaves, leavetype_leave_type_id, user_user_id) VALUES ((select count(user_leave_id)+1 from user_leaves), 5, 3, (select user_id from lms_user where first_name='Ankit'));
+INSERT INTO user_leaves (user_leave_id, number_of_leaves, leavetype_leave_type_id, user_user_id) VALUES ((select count(user_leave_id)+1 from user_leaves), 5, 4, (select user_id from lms_user where first_name='Ankit'));
+INSERT INTO user_leaves (user_leave_id, number_of_leaves, leavetype_leave_type_id, user_user_id) VALUES ((select count(user_leave_id)+1 from user_leaves), -1, 5, (select user_id from lms_user where first_name='Ankit'));
+
+-- Inserting leaves for User: Mohit
+INSERT INTO user_leaves (user_leave_id, number_of_leaves, leavetype_leave_type_id, user_user_id) VALUES ((select count(user_leave_id)+1 from user_leaves), 5, 1, (select user_id from lms_user where first_name='Mohit'));
+INSERT INTO user_leaves (user_leave_id, number_of_leaves, leavetype_leave_type_id, user_user_id) VALUES ((select count(user_leave_id)+1 from user_leaves), 5, 2, (select user_id from lms_user where first_name='Mohit'));
+INSERT INTO user_leaves (user_leave_id, number_of_leaves, leavetype_leave_type_id, user_user_id) VALUES ((select count(user_leave_id)+1 from user_leaves), 5, 3, (select user_id from lms_user where first_name='Mohit'));
+INSERT INTO user_leaves (user_leave_id, number_of_leaves, leavetype_leave_type_id, user_user_id) VALUES ((select count(user_leave_id)+1 from user_leaves), 5, 4, (select user_id from lms_user where first_name='Mohit'));
+INSERT INTO user_leaves (user_leave_id, number_of_leaves, leavetype_leave_type_id, user_user_id) VALUES ((select count(user_leave_id)+1 from user_leaves), -1, 5, (select user_id from lms_user where first_name='Mohit'));
+
+-- Inserting leaves for User: Rajni
+INSERT INTO user_leaves (user_leave_id, number_of_leaves, leavetype_leave_type_id, user_user_id) VALUES ((select count(user_leave_id)+1 from user_leaves), 5, 1, (select user_id from lms_user where first_name='Rajni'));
+INSERT INTO user_leaves (user_leave_id, number_of_leaves, leavetype_leave_type_id, user_user_id) VALUES ((select count(user_leave_id)+1 from user_leaves), 5, 2, (select user_id from lms_user where first_name='Rajni'));
+INSERT INTO user_leaves (user_leave_id, number_of_leaves, leavetype_leave_type_id, user_user_id) VALUES ((select count(user_leave_id)+1 from user_leaves), 5, 3, (select user_id from lms_user where first_name='Rajni'));
+INSERT INTO user_leaves (user_leave_id, number_of_leaves, leavetype_leave_type_id, user_user_id) VALUES ((select count(user_leave_id)+1 from user_leaves), 5, 4, (select user_id from lms_user where first_name='Rajni'));
+INSERT INTO user_leaves (user_leave_id, number_of_leaves, leavetype_leave_type_id, user_user_id) VALUES ((select count(user_leave_id)+1 from user_leaves), -1, 5, (select user_id from lms_user where first_name='Rajni'));
+
+-- Inserting leaves for User: Tarminder
+INSERT INTO user_leaves (user_leave_id, number_of_leaves, leavetype_leave_type_id, user_user_id) VALUES ((select count(user_leave_id)+1 from user_leaves), 5, 1, (select user_id from lms_user where first_name='Tarminder'));
+INSERT INTO user_leaves (user_leave_id, number_of_leaves, leavetype_leave_type_id, user_user_id) VALUES ((select count(user_leave_id)+1 from user_leaves), 5, 2, (select user_id from lms_user where first_name='Tarminder'));
+INSERT INTO user_leaves (user_leave_id, number_of_leaves, leavetype_leave_type_id, user_user_id) VALUES ((select count(user_leave_id)+1 from user_leaves), 5, 3, (select user_id from lms_user where first_name='Tarminder'));
+INSERT INTO user_leaves (user_leave_id, number_of_leaves, leavetype_leave_type_id, user_user_id) VALUES ((select count(user_leave_id)+1 from user_leaves), 5, 4, (select user_id from lms_user where first_name='Tarminder'));
+INSERT INTO user_leaves (user_leave_id, number_of_leaves, leavetype_leave_type_id, user_user_id) VALUES ((select count(user_leave_id)+1 from user_leaves), -1, 5, (select user_id from lms_user where first_name='Tarminder'));
+
+INSERT INTO public.lms_user_contact(user_contact_id, email_address, mobile_number, phone_number, user_user_id) VALUES ((select count(user_contact_id)+1 from lms_user_contact), 'gurminder.singh@trantorinc.com', '1234567890', '1234567890', (select user_id from lms_user where first_name='Gurminder'));
+    
+INSERT INTO public.lms_user_contact(user_contact_id, email_address, mobile_number, phone_number, user_user_id) VALUES ((select count(user_contact_id)+1 from lms_user_contact), 'manoj4.kumar@trantorinc.com', '1234567890', '1234567890', (select user_id from lms_user where first_name='Manoj'));
+
+INSERT INTO public.lms_user_contact(user_contact_id, email_address, mobile_number, phone_number, user_user_id) VALUES ((select count(user_contact_id)+1 from lms_user_contact), 'ankit.mehta@trantorinc.com', '1234567890', '1234567890', (select user_id from lms_user where first_name='Ankit'));
+    
+INSERT INTO public.lms_user_contact(user_contact_id, email_address, mobile_number, phone_number, user_user_id) VALUES ((select count(user_contact_id)+1 from lms_user_contact), 'mohit.garg@trantorinc.com', '1234567890', '1234567890', (select user_id from lms_user where first_name='Mohit'));
+    
+INSERT INTO public.lms_user_contact(user_contact_id, email_address, mobile_number, phone_number, user_user_id) VALUES ((select count(user_contact_id)+1 from lms_user_contact), 'rajni.ubhi@trantorinc.com', '1234567890', '1234567890', (select user_id from lms_user where first_name='Rajni'));
+
+INSERT INTO public.lms_user_contact(user_contact_id, email_address, mobile_number, phone_number, user_user_id) VALUES ((select count(user_contact_id)+1 from lms_user_contact), 'tarminder.kumar@trantorinc.com', '1234567890', '1234567890', (select user_id from lms_user where first_name='Tarminder'));
+    
+    
