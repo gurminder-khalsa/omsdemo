@@ -1,0 +1,11 @@
+<html>
+    <body>
+        <h3>Hi ${user.firstName} ${user.lastName}, </h3>
+ 
+        <div>
+            You have successfully applied for a leave. Below are the details:<br/>            
+            Leave Type: ${leaveDetails.leaveType.leaveDescription} <br/>
+            Leave Date: ${leaveDetails.startDate} to ${leaveDetails.endDate} <br/>
+        </div>
+    </body>
+</html>

@@ -1,0 +1,12 @@
+<html>
+    <body>
+        <h3>Hi ${user.manager.firstName} ${user.manager.lastName}, </h3>
+ 
+        <div>
+            You have received a leave application. Below are the details:<br/>
+            Applied By: ${user.firstName} ${user.lastName} <br/>
+            Leave Type: ${leaveDetails.leaveType.leaveDescription} <br/>
+            Leave Date: ${leaveDetails.startDate} to ${leaveDetails.endDate} <br/>
+        </div>
+    </body>
+</html>
