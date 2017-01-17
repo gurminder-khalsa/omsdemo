@@ -31,6 +31,9 @@ public class UserLeaves {
 	
 	@Column(name="number_of_leaves")
 	private Long numberOfLeaves;
+	
+	@Column(name="number_of_days")
+	private Long numberOfDays;
 
 	public Long getId() {
 		return id;
@@ -62,6 +65,14 @@ public class UserLeaves {
 
 	public void setNumberOfLeaves(Long numberOfLeaves) {
 		this.numberOfLeaves = numberOfLeaves;
+	}
+
+	public Long getNumberOfDays() {
+		return numberOfDays;
+	}
+
+	public void setNumberOfDays(Long numberOfDays) {
+		this.numberOfDays = numberOfDays;
 	}
 	
 }
