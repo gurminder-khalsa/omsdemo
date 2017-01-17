@@ -6,9 +6,9 @@
 		jQuery(document).ready(function($) {
 			    $( "#startDate" ).datepicker({dateFormat:"mm-dd-yy"});
 				$( "#endDate" ).datepicker({dateFormat:"mm-dd-yy"});
-				$("#save").click(function(event) {
+				/* $("#save").click(function(event) {
 					alert($( "#startDate" ).val());
-				});
+				}); */
 		});
   </script>
         <!-- Navigation -->
