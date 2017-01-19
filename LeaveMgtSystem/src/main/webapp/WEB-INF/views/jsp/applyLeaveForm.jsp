@@ -78,19 +78,23 @@
 											<!--<form:input path="startDate" class="datepicker form-control" data-date-format="mm/dd/yyyy" /> -->
 											<form:input path="startDate" class="form-control" name="startDate" id="startDate"  />
 										</div>
+										<div class="col-xs-4"><font color="red"><form:errors path="startDate" cssClass="error" element="div"/></font></div>
 									</div>
+									
 									<div class="form-group row">
 										<label for="example-text-input" class="col-xs-2 col-form-label"><spring:message code="label.end.date"/>:</label>
 										<div class="col-xs-3">					
 											<form:input path="endDate" class="form-control" name="endDate" id="endDate"  />
 										</div>	
+										<div class="col-xs-4"><font color="red"><form:errors path="endDate" cssClass="error" element="div"/></font></div>
 									</div>
 									
 									<div class="form-group row">
 										<label for="example-text-input" class="col-xs-2 col-form-label"><spring:message code="label.leave.reason"/>:</label>
 										<div class="col-xs-3">					
 											<form:input path="leaveReason" class="form-control" /> 
-										</div>	
+										</div>
+										<div class="col-xs-4"><font color="red"><form:errors path="leaveReason" cssClass="error" element="div"/></font></div>	
 									</div>
 									<div class="form-buttons">
 										<div class="col-xs-2 col-sm-2 col-md-2">
