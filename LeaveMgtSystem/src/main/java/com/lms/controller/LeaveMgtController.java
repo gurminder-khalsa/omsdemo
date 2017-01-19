@@ -7,7 +7,11 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import javax.validation.Valid;
+
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -42,32 +46,38 @@ public class LeaveMgtController {
 	@Autowired
 	private IUserService userService;
 	
+	@Autowired
+	private MessageSource messageSource;
+	
+	private ModelAndView getApplyLeaveModelAndView(ApplyLeave applyLeave) {
+		ModelAndView modelAndView = new ModelAndView();				
+		modelAndView.addObject("applyLeave",applyLeave);
+		modelAndView.addObject("leaveTypes", leaveManagementService.getLeaveTypes());
+		modelAndView.setViewName("applyLeaveForm");
+		return modelAndView;
+	}
+	
 	@RequestMapping(value = "/applyLeaveForm",method = RequestMethod.GET)
 	public ModelAndView applyLeaveForm() {
-		ModelAndView model = new ModelAndView();
-		model.addObject("leaveTypes", leaveManagementService.getLeaveTypes());
-		model.addObject("applyLeave",new ApplyLeave());
-		model.setViewName("applyLeaveForm");
-		return model;
-
+		return getApplyLeaveModelAndView(new ApplyLeave());
 	}
 	
 	@RequestMapping(value = "/submitLeaveForm",method = RequestMethod.POST)
 	public ModelAndView submitLeaveForm(@RequestParam String actionButton, 
-			@ModelAttribute("applyLeave") ApplyLeave applyLeave, BindingResult bindingResult ) {
+			@Valid @ModelAttribute("applyLeave") ApplyLeave applyLeave, BindingResult bindingResult ) {
 		if(actionButton.equalsIgnoreCase("Cancel")){
 			return calcelLeave(applyLeave);
+		}
+		if(!validateApplyLeave(applyLeave,bindingResult)){
+			return getApplyLeaveModelAndView(applyLeave);
 		}
 		ModelAndView model = new ModelAndView();
 		try {
 			leaveManagementService.submitLeaveDetails(applyLeave);
 		} catch (LMSException e) {
 			if(e.getExceptionKey().equals(ExceptionKey.Leaves_Exhausted)){
-				bindingResult.rejectValue("appliedLeaveType", "error.idLeavesExhausted", "Number of leaves for Leave Type are exhausted, please select another Leave Type");
-				model.addObject("applyLeave",applyLeave);
-				model.addObject("leaveTypes", leaveManagementService.getLeaveTypes());
-				model.setViewName("applyLeaveForm");
-				return model;
+				bindingResult.rejectValue("appliedLeaveType", "error.leaves.exhausted", null);
+				return getApplyLeaveModelAndView(applyLeave);
 			}
 			return showErrorPage(model, e);
 		}
@@ -75,7 +85,30 @@ public class LeaveMgtController {
 		return getAppliedLeaves();
 
 	}
+
 	
+	
+	private boolean validateApplyLeave(ApplyLeave applyLeave, BindingResult bindingResult) {
+		/**
+		 * Facing some problems with Spring validator framework. hence doing manual validation
+		 */		
+		if(applyLeave.getStartDate()==null){
+			bindingResult.rejectValue("startDate", "error.startDateNull", "Start Date null");
+		}
+		if(applyLeave.getEndDate()==null){
+			bindingResult.rejectValue("endDate", "error.endDateNull", "End Date null");
+		}
+		if(StringUtils.isBlank(applyLeave.getLeaveReason())){
+			bindingResult.rejectValue("leaveReason", "error.leaveReasonNull", "Leave reason null");
+		}
+		if (bindingResult.hasErrors()) {
+			return false;
+		}else{
+			return true;
+		}
+			
+	}
+
 	public ModelAndView calcelLeave(@ModelAttribute("applyLeave") ApplyLeave applyLeave ) {
 		System.out.println("Apply leave called: "+applyLeave.getLeaveReason());
 		try {

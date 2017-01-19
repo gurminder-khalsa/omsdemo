@@ -4,6 +4,9 @@
 package com.lms.rest.model;
 
 import java.util.Date;
+import java.util.concurrent.TimeUnit;
+
+import javax.validation.constraints.NotNull;
 
 import org.springframework.format.annotation.DateTimeFormat;
 
@@ -20,12 +23,15 @@ public class ApplyLeave implements IApplyLeave{
 	
 	private String appliedleaveType;
 	
+	@NotNull
 	@DateTimeFormat(pattern="mm-dd-yy")
 	private Date startDate;
 	
+	@NotNull
 	@DateTimeFormat(pattern="mm-dd-yy")
 	private Date endDate;
 	
+	@NotNull
 	private String leaveReason;
 	
 	private String status;
@@ -122,6 +128,11 @@ public class ApplyLeave implements IApplyLeave{
 
 	public void setId(Long id) {
 		this.id = id;
+	}
+	
+	public Long getNumberOfdays(){		
+		long difference =  getEndDate().getTime() - getStartDate().getTime();		
+		return TimeUnit.DAYS.convert(difference, TimeUnit.MILLISECONDS)+1;
 	}
 	
 }

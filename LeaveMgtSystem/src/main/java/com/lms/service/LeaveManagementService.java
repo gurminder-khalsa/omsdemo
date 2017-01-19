@@ -101,7 +101,7 @@ public class LeaveManagementService implements ILeaveManagementService {
 		applyLeaveEntity.setUser(user);		
 		applyLeaveRepository.save(applyLeaveEntity);	
 		if(appliedLeaveId == null && !userLeave.getLeaveType().getLeaveType().equals(LeaveTypes.LOSS_OFF_PAY.getLeaveType())){
-			userLeave.setNumberOfLeaves(Long.valueOf(userLeave.getNumberOfLeaves().longValue() - 1));
+			userLeave.setNumberOfLeaves(Long.valueOf(userLeave.getNumberOfLeaves().longValue() - applyLeaveEntity.getNumberOfDays()));
 			userLeavesRepository.save(userLeave);
 		}
 		
@@ -203,7 +203,7 @@ public class LeaveManagementService implements ILeaveManagementService {
 		applyLeaveEntity.setStatus(LeaveStatus.CANCELLED.getStatus());
 		applyLeaveRepository.save(applyLeaveEntity);
 		UserLeaves userLeave = getUserLeaves(applyLeave);
-		userLeave.setNumberOfLeaves(Long.valueOf(userLeave.getNumberOfLeaves().longValue() + 1));
+		userLeave.setNumberOfLeaves(Long.valueOf(userLeave.getNumberOfLeaves().longValue() + applyLeaveEntity.getNumberOfDays()));
 		userLeavesRepository.save(userLeave);
 	}
 
