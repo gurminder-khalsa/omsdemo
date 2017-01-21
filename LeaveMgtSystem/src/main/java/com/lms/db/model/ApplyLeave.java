@@ -44,6 +44,8 @@ public class ApplyLeave {
 	
 	@ManyToOne
 	private User user;
+	
+	private Long numberOfDays;
 
 	/**
 	 * @return the id
@@ -142,5 +144,13 @@ public class ApplyLeave {
 	public void setStatus(String status) {
 		this.status = status;
 	}
-	
+
+	public Long getNumberOfDays() {
+		return numberOfDays;
+	}
+
+	public void setNumberOfDays(Long numberOfDays) {
+		this.numberOfDays = numberOfDays;
+	}
+		
 }
