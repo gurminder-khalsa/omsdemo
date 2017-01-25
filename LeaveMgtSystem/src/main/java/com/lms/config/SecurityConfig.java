@@ -26,7 +26,7 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
-import com.lms.service.UserService;
+import com.lms.service.UserAuthenticationService;
 
 @EnableWebSecurity
 public class SecurityConfig extends WebSecurityConfigurerAdapter{
@@ -35,7 +35,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
 	DataSource dataSource;
 	
 	@Autowired
-	private UserService userService;
+	private UserAuthenticationService userAuthenticationService;
 
 	@Autowired
 	public void configAuthentication(AuthenticationManagerBuilder auth) throws Exception {
@@ -46,16 +46,17 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
 		.authoritiesByUsernameQuery(
 			"select u.username, ur.role from lms_user u, lms_user_role ur where ur.user_user_id = u.user_id and u.username=?");*/
 		
-		auth.userDetailsService(userService);
+		auth.userDetailsService(userAuthenticationService);
 	}
 	
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
 
 	  http.authorizeRequests()	
-	  	.antMatchers("/").access("hasAnyRole('ROLE_USER','ROLE_ADMIN')")
-		.antMatchers("/admin/**").access("hasRole('ROLE_ADMIN')")
-		.antMatchers("/lms/**").access("hasAnyRole('ROLE_USER','ROLE_ADMIN')")
+	  	.antMatchers("/").access("hasAnyRole('ROLE_USER','ROLE_ADMIN','ROLE_MANAGER')")
+	  	.antMatchers("/lms/**").access("hasAnyRole('ROLE_USER','ROLE_ADMIN','ROLE_MANAGER')")
+		.antMatchers("/lms/admin/**").access("hasRole('ROLE_ADMIN')")		
+		.antMatchers("/lms/manager/**").access("hasAnyRole('ROLE_ADMIN','ROLE_MANAGER')")
 		.and().formLogin()
 		.loginPage("/login")
 		.loginProcessingUrl("/login")
